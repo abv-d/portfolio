@@ -12,7 +12,7 @@
             --item-bg: rgba(255, 255, 255, 0.05);
             --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             --ui-radius: 5px; 
-            --gap-size: 12px; /* Увеличен зазор между карточками */
+            --gap-size: 8px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -22,7 +22,7 @@
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             color: #fff;
-            padding: 0 20px; /* Боковые отступы как в шаблоне */
+            padding: 0 var(--gap-size); 
         }
 
         body::-webkit-scrollbar { display: none; }
@@ -31,7 +31,7 @@
         .edge-overlay {
             position: fixed;
             left: 0; right: 0;
-            height: 100px;
+            height: 120px;
             z-index: 900;
             pointer-events: none;
         }
@@ -44,68 +44,67 @@
             top: 25px; left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
-            width: 280px;
+            width: 300px;
         }
 
         .floating-nav {
             background: var(--menu-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border-radius: var(--ui-radius);
             padding: 0 8px;
             transition: var(--transition);
             height: 64px; 
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             overflow: hidden;
             max-height: 64px;
         }
 
-        .floating-nav:hover { max-height: 400px; height: auto; padding-bottom: 10px; }
+        .floating-nav:hover { max-height: 450px; height: auto; padding-bottom: 12px; }
 
         .nav-header {
             display: flex; align-items: center; justify-content: space-between;
-            height: 64px; padding: 0 10px;
+            height: 64px; padding: 0 12px;
         }
 
-        .logo { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .logo { 
+            font-size: 12px; font-weight: 600; text-transform: uppercase; 
+            letter-spacing: 1.2px; text-align: left; flex-grow: 1;
+        }
 
-        .nav-links { display: flex; flex-direction: column; gap: 4px; opacity: 0; transition: 0.3s; padding-top: 5px; }
+        .nav-links { display: flex; flex-direction: column; gap: 6px; opacity: 0; transition: 0.3s; padding-top: 4px; }
         .floating-nav:hover .nav-links { opacity: 1; }
         .nav-links a { 
-            text-decoration: none; color: #aaa; font-size: 10px; text-transform: uppercase;
-            padding: 12px; border-radius: var(--ui-radius); transition: 0.3s;
+            text-decoration: none; color: #fff; font-size: 10px; text-transform: uppercase;
+            background: var(--item-bg); padding: 14px 16px;
+            border-radius: var(--ui-radius); transition: 0.3s;
         }
-        .nav-links a:hover { color: #fff; background: var(--item-bg); }
+        .nav-links a:hover { background: rgba(255, 255, 255, 0.12); }
 
-        .burger-box { width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; position: relative; }
-        .line { height: 1px; background: #fff; width: 12px; position: absolute; transition: 0.3s; }
-        .line-1 { transform: translateY(-3px); }
-        .line-2 { transform: translateY(3px); }
+        .burger-box { width: 32px; height: 32px; background: rgba(255,255,255,0.05); border-radius: var(--ui-radius); display: flex; justify-content: center; align-items: center; position: relative; }
+        .line { height: 1.2px; background: #fff; width: 14px; position: absolute; transition: var(--transition); }
+        .line-1 { transform: translateY(-3.5px); }
+        .line-2 { transform: translateY(3.5px); }
         .floating-nav:hover .line-1 { transform: rotate(45deg); }
         .floating-nav:hover .line-2 { transform: rotate(-45deg); }
 
-        /* --- СЕТКА (Размер как в Aerra) --- */
+        /* --- СЕТКА (Возвращен размер) --- */
         #infinite-grid {
             display: grid; 
-            grid-template-columns: repeat(6, 1fr); /* 6 колонок для мелкости */
+            grid-template-columns: repeat(5, 1fr); /* Снова 5 колонок */
             gap: var(--gap-size); 
             width: 100%; 
-            max-width: 1600px;
-            margin: 0 auto;
-            padding-top: 100px; 
+            padding-top: 10px; 
             padding-bottom: 150px;
         }
 
         .card {
             position: relative; 
-            aspect-ratio: 1 / 1.2; 
+            aspect-ratio: 1 / 1.3; 
             overflow: hidden;
             background: #0a0a0a; 
             border-radius: var(--ui-radius); 
             cursor: pointer;
-            border: 1px solid transparent;
-            transition: border 0.4s ease;
-            /* Анимация появления */
             opacity: 0;
             transform: translateY(20px);
         }
@@ -116,57 +115,64 @@
             transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .card:hover { border: 1px solid rgba(255, 255, 255, 0.15); }
-
         .card img {
             width: 100%; height: 100%; object-fit: cover;
             display: block; transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .card:hover img { transform: scale(1.03); }
+        .card:hover img { transform: scale(1.05); }
 
         .card-overlay {
             position: absolute; inset: 0; 
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
-            display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 15px; opacity: 0; transition: 0.4s ease;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; opacity: 0; transition: 0.4s ease;
+            text-align: center;
+            backdrop-filter: blur(5px);
         }
 
         .card:hover .card-overlay { opacity: 1; }
 
-        .project-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-        .project-category { font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-top: 2px; }
+        /* Текст на карточках теперь чисто белый */
+        .project-title { 
+            font-size: 13px; font-weight: 600; text-transform: uppercase; 
+            letter-spacing: 1px; margin-bottom: 6px; color: #ffffff; 
+        }
+        .project-category { 
+            font-size: 11px; font-weight: 400; text-transform: uppercase; 
+            letter-spacing: 0.5px; color: #ffffff; 
+        }
 
         /* --- НИЖНИЙ ВИДЖЕТ --- */
         .bottom-widget {
             position: fixed; bottom: 30px; left: 30px;
-            z-index: 1000; display: flex; align-items: flex-end; gap: 8px;
+            z-index: 1000; display: flex; align-items: flex-end; gap: 10px;
         }
 
         .glass-panel {
-            background: var(--menu-bg); backdrop-filter: blur(20px);
-            border-radius: var(--ui-radius); border: 1px solid rgba(255,255,255,0.08);
+            background: var(--menu-bg); backdrop-filter: blur(25px);
+            border-radius: var(--ui-radius); border: 1px solid rgba(255,255,255,0.05);
             transition: var(--transition);
         }
 
-        .profile-card { padding: 8px; width: 180px; display: flex; flex-wrap: wrap; overflow: hidden; }
-        .profile-card:hover { width: 380px; padding: 15px; }
+        .profile-card { padding: 10px; width: 200px; display: flex; flex-wrap: wrap; overflow: hidden; }
+        .profile-card:hover { width: 400px; padding: 18px; }
 
-        .avatar { width: 40px; height: 40px; border-radius: var(--ui-radius); object-fit: cover; }
-        .profile-info { margin-left: 12px; display: flex; align-items: center; height: 40px; }
-        .profile-name { font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .avatar { width: 48px; height: 48px; border-radius: var(--ui-radius); object-fit: cover; }
+        .profile-info { margin-left: 14px; display: flex; align-items: center; height: 48px; }
+        .profile-name { font-size: 14px; font-weight: 600; text-transform: uppercase; }
 
         .profile-bio {
-            font-size: 14px; opacity: 0; max-height: 0; margin-top: 0;
-            transition: var(--transition); color: #aaa; flex-basis: 100%;
+            font-size: 15px; opacity: 0; max-height: 0; margin-top: 0;
+            transition: var(--transition); color: rgba(255, 255, 255, 0.8); flex-basis: 100%;
         }
-        .profile-card:hover .profile-bio { opacity: 1; max-height: 150px; margin-top: 15px; }
+        .profile-card:hover .profile-bio { opacity: 1; max-height: 200px; margin-top: 18px; }
 
-        .contact-btn { width: 56px; height: 56px; display: flex; justify-content: center; align-items: center; text-decoration: none; }
-        .contact-btn svg { width: 16px; height: 16px; fill: #fff; }
+        .contact-btn { width: 68px; height: 68px; display: flex; justify-content: center; align-items: center; text-decoration: none; }
+        .contact-btn svg { width: 18px; height: 18px; fill: #fff; }
 
-        @media (max-width: 1400px) { #infinite-grid { grid-template-columns: repeat(4, 1fr); } }
-        @media (max-width: 900px) { #infinite-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 1200px) { #infinite-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) { #infinite-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -240,8 +246,7 @@
             const img = document.createElement('img');
             img.src = data.image;
             img.onload = () => {
-                // Плавное появление после загрузки
-                setTimeout(() => card.classList.add('visible'), index * 50);
+                setTimeout(() => card.classList.add('visible'), index * 60);
             };
             img.onerror = () => { card.style.display = 'none'; };
 
@@ -265,7 +270,7 @@
                 const projectsData = parseCSV(csvText);
                 grid.innerHTML = '';
                 
-                // Дублируем для массы, чтобы увидеть эффект сетки
+                // Дублируем для заполнения страницы
                 const fullList = [...projectsData, ...projectsData, ...projectsData, ...projectsData];
                 fullList.forEach((project, i) => {
                     const card = createCard(project, i);
