@@ -10,9 +10,9 @@
             --bg-black: #000000;
             --menu-bg: rgba(0, 0, 0, 0.7); 
             --item-bg: rgba(255, 255, 255, 0.05);
-            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             --ui-radius: 5px; 
-            --gap-size: 8px;
+            --gap-size: 12px; /* Увеличен зазор между карточками */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -22,7 +22,7 @@
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             color: #fff;
-            padding: 0 var(--gap-size); 
+            padding: 0 20px; /* Боковые отступы как в шаблоне */
         }
 
         body::-webkit-scrollbar { display: none; }
@@ -31,26 +31,12 @@
         .edge-overlay {
             position: fixed;
             left: 0; right: 0;
-            height: 140px;
+            height: 100px;
             z-index: 900;
             pointer-events: none;
         }
-
-        .edge-top {
-            top: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            mask-image: linear-gradient(to bottom, black, transparent);
-        }
-
-        .edge-bottom {
-            bottom: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            mask-image: linear-gradient(to top, black, transparent);
-        }
+        .edge-top { top: 0; background: linear-gradient(to bottom, black 0%, transparent 100%); }
+        .edge-bottom { bottom: 0; background: linear-gradient(to top, black 0%, transparent 100%); }
 
         /* --- ВЕРХНЕЕ МЕНЮ --- */
         .menu-wrapper {
@@ -58,165 +44,129 @@
             top: 25px; left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
-            width: 300px;
+            width: 280px;
         }
 
         .floating-nav {
             background: var(--menu-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: var(--ui-radius);
             padding: 0 8px;
             transition: var(--transition);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
             height: 64px; 
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
             max-height: 64px;
         }
 
-        .floating-nav:hover { 
-            max-height: 450px; 
-            height: auto; 
-            padding-bottom: 12px;
-        }
+        .floating-nav:hover { max-height: 400px; height: auto; padding-bottom: 10px; }
 
         .nav-header {
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            height: 64px;
-            padding: 0 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 64px; padding: 0 10px;
         }
 
-        .logo { 
-            font-size: 12px; 
-            font-weight: 600; 
-            text-transform: uppercase; 
-            letter-spacing: 1.2px;
-            text-align: left;
-            flex-grow: 1;
-        }
+        .logo { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-        .nav-links { 
-            display: flex; flex-direction: column; gap: 6px;
-            opacity: 0; transition: opacity 0.4s ease;
-            pointer-events: none; padding: 4px 0 0 0;
-        }
-
-        .floating-nav:hover .nav-links { opacity: 1; pointer-events: auto; }
-
+        .nav-links { display: flex; flex-direction: column; gap: 4px; opacity: 0; transition: 0.3s; padding-top: 5px; }
+        .floating-nav:hover .nav-links { opacity: 1; }
         .nav-links a { 
-            text-decoration: none; color: #fff; font-size: 10px; font-weight: 500; 
-            text-transform: uppercase; letter-spacing: 1px;
-            background: var(--item-bg); padding: 14px 16px;
-            border-radius: var(--ui-radius); transition: 0.3s;
+            text-decoration: none; color: #aaa; font-size: 10px; text-transform: uppercase;
+            padding: 12px; border-radius: var(--ui-radius); transition: 0.3s;
         }
+        .nav-links a:hover { color: #fff; background: var(--item-bg); }
 
-        .nav-links a:hover { background: rgba(255, 255, 255, 0.12); }
+        .burger-box { width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; position: relative; }
+        .line { height: 1px; background: #fff; width: 12px; position: absolute; transition: 0.3s; }
+        .line-1 { transform: translateY(-3px); }
+        .line-2 { transform: translateY(3px); }
+        .floating-nav:hover .line-1 { transform: rotate(45deg); }
+        .floating-nav:hover .line-2 { transform: rotate(-45deg); }
 
-        .burger-box {
-            width: 32px; height: 32px; 
-            background: rgba(255,255,255,0.05);
-            border-radius: var(--ui-radius); 
-            display: flex; justify-content: center; align-items: center;
-            position: relative;
-        }
-
-        .line { height: 1.2px; background: #fff; width: 14px; transition: var(--transition); position: absolute; }
-        .line-1 { transform: translateY(-3.5px); }
-        .line-2 { transform: translateY(3.5px); }
-        .floating-nav:hover .line-1 { transform: rotate(45deg) translateY(0); }
-        .floating-nav:hover .line-2 { transform: rotate(-45deg) translateY(0); }
-
-        /* --- СЕТКА КАРТОЧЕК --- */
+        /* --- СЕТКА (Размер как в Aerra) --- */
         #infinite-grid {
             display: grid; 
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, 1fr); /* 6 колонок для мелкости */
             gap: var(--gap-size); 
             width: 100%; 
-            padding-top: 10px; 
-            padding-bottom: 120px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding-top: 100px; 
+            padding-bottom: 150px;
         }
 
         .card {
             position: relative; 
-            aspect-ratio: 1 / 1.3; 
+            aspect-ratio: 1 / 1.2; 
             overflow: hidden;
             background: #0a0a0a; 
             border-radius: var(--ui-radius); 
             cursor: pointer;
+            border: 1px solid transparent;
+            transition: border 0.4s ease;
+            /* Анимация появления */
+            opacity: 0;
+            transform: translateY(20px);
         }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card:hover { border: 1px solid rgba(255, 255, 255, 0.15); }
 
         .card img {
             width: 100%; height: 100%; object-fit: cover;
-            display: block; opacity: 0;
-            transition: opacity 0.5s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            display: block; transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .card img.loaded { opacity: 1; }
+        .card:hover img { transform: scale(1.03); }
 
         .card-overlay {
             position: absolute; inset: 0; 
-            background: rgba(0, 0, 0, 0.65);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; transition: var(--transition); 
-            text-align: center; padding: 20px;
-            backdrop-filter: blur(5px);
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 15px; opacity: 0; transition: 0.4s ease;
         }
 
-        .card:hover img { transform: scale(1.05); }
         .card:hover .card-overlay { opacity: 1; }
 
-        .project-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .project-category { font-size: 10px; font-weight: 400; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px; }
+        .project-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .project-category { font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-top: 2px; }
 
         /* --- НИЖНИЙ ВИДЖЕТ --- */
         .bottom-widget {
-            position: fixed;
-            bottom: 30px; left: 30px;
-            z-index: 1000;
-            display: flex; align-items: flex-end; gap: 10px;
+            position: fixed; bottom: 30px; left: 30px;
+            z-index: 1000; display: flex; align-items: flex-end; gap: 8px;
         }
 
         .glass-panel {
-            background: var(--menu-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: var(--ui-radius);
-            display: flex; align-items: center; transition: var(--transition);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--menu-bg); backdrop-filter: blur(20px);
+            border-radius: var(--ui-radius); border: 1px solid rgba(255,255,255,0.08);
+            transition: var(--transition);
         }
 
-        .profile-card {
-            padding: 10px; width: 200px; cursor: pointer;
-            overflow: hidden; display: flex; flex-wrap: wrap; align-content: flex-start;
-        }
+        .profile-card { padding: 8px; width: 180px; display: flex; flex-wrap: wrap; overflow: hidden; }
+        .profile-card:hover { width: 380px; padding: 15px; }
 
-        .profile-card:hover { width: 400px; padding: 18px; }
-
-        .avatar { width: 48px; height: 48px; border-radius: var(--ui-radius); object-fit: cover; flex-shrink: 0; }
-        .profile-info { margin-left: 14px; display: flex; align-items: center; height: 48px; }
-        .profile-name { font-size: 14px; font-weight: 600; text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px; }
+        .avatar { width: 40px; height: 40px; border-radius: var(--ui-radius); object-fit: cover; }
+        .profile-info { margin-left: 12px; display: flex; align-items: center; height: 40px; }
+        .profile-name { font-size: 12px; font-weight: 600; text-transform: uppercase; }
 
         .profile-bio {
-            font-size: 15px; opacity: 0; max-height: 0;
-            transition: var(--transition); color: rgba(255, 255, 255, 0.8);
-            line-height: 1.5; margin-top: 0; flex-basis: 100%; font-weight: 400;
+            font-size: 14px; opacity: 0; max-height: 0; margin-top: 0;
+            transition: var(--transition); color: #aaa; flex-basis: 100%;
         }
+        .profile-card:hover .profile-bio { opacity: 1; max-height: 150px; margin-top: 15px; }
 
-        .profile-card:hover .profile-bio { opacity: 1; max-height: 200px; margin-top: 18px; }
+        .contact-btn { width: 56px; height: 56px; display: flex; justify-content: center; align-items: center; text-decoration: none; }
+        .contact-btn svg { width: 16px; height: 16px; fill: #fff; }
 
-        .contact-btn { width: 68px; height: 68px; display: flex; justify-content: center; align-items: center; text-decoration: none; }
-        .contact-btn:hover { background: rgba(255, 255, 255, 0.12); }
-        .contact-btn svg { width: 18px; height: 18px; fill: #fff; transition: var(--transition); }
-
-        @media (max-width: 1200px) { #infinite-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 768px) { 
-            #infinite-grid { grid-template-columns: repeat(2, 1fr); }
-            .profile-card:hover { width: 300px; }
-        }
+        @media (max-width: 1400px) { #infinite-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 900px) { #infinite-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -252,11 +202,9 @@
             </div>
             <p class="profile-bio">I create clean, timeless photography and video that tell stories through light and motion.</p>
         </div>
-        
         <a href="mailto:mail@example.com" class="glass-panel contact-btn">
             <svg viewBox="0 0 24 24"><path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,18H4V8l8,5l8-5V18z M12,11L4,6h16L12,11z"/></svg>
         </a>
-
         <a href="https://t.me/example" target="_blank" class="glass-panel contact-btn">
             <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
         </a>
@@ -268,23 +216,19 @@
 
         function parseCSV(text) {
             const lines = text.split('\n');
-            return lines.slice(1) 
-                .filter(line => line.trim() !== '')
-                .map(line => {
-                    const columns = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    return {
-                        title: columns[0]?.replace(/^"|"$/g, '').trim(),
-                        category: columns[1]?.replace(/^"|"$/g, '').trim(),
-                        image: columns[2]?.replace(/^"|"$/g, '').trim(),
-                        link: columns[3]?.replace(/^"|"$/g, '').trim()
-                    };
-                });
+            return lines.slice(1).filter(line => line.trim() !== '').map(line => {
+                const columns = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                return {
+                    title: columns[0]?.replace(/^"|"$/g, '').trim(),
+                    category: columns[1]?.replace(/^"|"$/g, '').trim(),
+                    image: columns[2]?.replace(/^"|"$/g, '').trim(),
+                    link: columns[3]?.replace(/^"|"$/g, '').trim()
+                };
+            });
         }
 
-        function createCard(data) {
-            // Игнорируем пустые строки или строки с заголовками
+        function createCard(data, index) {
             if (!data.image || data.image.length < 5) return null;
-
             const card = document.createElement('div');
             card.className = 'card';
             
@@ -294,11 +238,11 @@
             link.style.textDecoration = 'none';
 
             const img = document.createElement('img');
-            img.src = data.image; 
-            img.alt = data.title;
-            img.onload = () => img.classList.add('loaded');
-            
-            // Если картинка не загрузилась, скрываем карточку
+            img.src = data.image;
+            img.onload = () => {
+                // Плавное появление после загрузки
+                setTimeout(() => card.classList.add('visible'), index * 50);
+            };
             img.onerror = () => { card.style.display = 'none'; };
 
             const overlay = document.createElement('div');
@@ -319,24 +263,15 @@
                 const response = await fetch(SHEET_CSV_URL);
                 const csvText = await response.text();
                 const projectsData = parseCSV(csvText);
-                
                 grid.innerHTML = '';
-
-                if (projectsData.length === 0) {
-                    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.5;">Нет данных в таблице</p>';
-                    return;
-                }
-
-                // Заполняем сетку, повторяя данные 10 раз для массы
-                for (let i = 0; i < 10; i++) {
-                    projectsData.forEach(project => {
-                        const card = createCard(project);
-                        if (card) grid.appendChild(card);
-                    });
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
+                
+                // Дублируем для массы, чтобы увидеть эффект сетки
+                const fullList = [...projectsData, ...projectsData, ...projectsData, ...projectsData];
+                fullList.forEach((project, i) => {
+                    const card = createCard(project, i);
+                    if (card) grid.appendChild(card);
+                });
+            } catch (e) { console.error(e); }
         }
 
         initPortfolio();
