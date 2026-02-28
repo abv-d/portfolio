@@ -11,7 +11,7 @@
             --menu-bg: rgba(0, 0, 0, 0.7); 
             --item-bg: rgba(255, 255, 255, 0.05);
             --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            --ui-radius: 5px; /* Скругления по запросу */
+            --ui-radius: 5px; 
             --gap-size: 8px;
         }
 
@@ -27,7 +27,7 @@
 
         body::-webkit-scrollbar { display: none; }
 
-        /* --- ЭФФЕКТЫ КРАЕВ (Градиентные блюры) --- */
+        /* --- ЭФФЕКТЫ КРАЕВ --- */
         .edge-overlay {
             position: fixed;
             left: 0; right: 0;
@@ -71,7 +71,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 64px; /* Увеличенная высота */
+            height: 64px; 
             border: 1px solid rgba(255, 255, 255, 0.08);
             max-height: 64px;
         }
@@ -95,7 +95,7 @@
             font-weight: 600; 
             text-transform: uppercase; 
             letter-spacing: 1.2px;
-            text-align: left; /* Выключка влево */
+            text-align: left;
             flex-grow: 1;
         }
 
@@ -136,7 +136,7 @@
             grid-template-columns: repeat(5, 1fr);
             gap: var(--gap-size); 
             width: 100%; 
-            padding-top: 10px; /* Отступ 10px от верхнего края */
+            padding-top: 10px; 
             padding-bottom: 120px;
         }
 
@@ -282,7 +282,8 @@
         }
 
         function createCard(data) {
-            if (!data.image || data.image === '') return null;
+            // Игнорируем пустые строки или строки с заголовками
+            if (!data.image || data.image.length < 5) return null;
 
             const card = document.createElement('div');
             card.className = 'card';
@@ -297,6 +298,9 @@
             img.alt = data.title;
             img.onload = () => img.classList.add('loaded');
             
+            // Если картинка не загрузилась, скрываем карточку
+            img.onerror = () => { card.style.display = 'none'; };
+
             const overlay = document.createElement('div');
             overlay.className = 'card-overlay';
             overlay.innerHTML = `
@@ -317,10 +321,19 @@
                 const projectsData = parseCSV(csvText);
                 
                 grid.innerHTML = '';
-                projectsData.forEach(project => {
-                    const card = createCard(project);
-                    if (card) grid.appendChild(card);
-                });
+
+                if (projectsData.length === 0) {
+                    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.5;">Нет данных в таблице</p>';
+                    return;
+                }
+
+                // Заполняем сетку, повторяя данные 10 раз для массы
+                for (let i = 0; i < 10; i++) {
+                    projectsData.forEach(project => {
+                        const card = createCard(project);
+                        if (card) grid.appendChild(card);
+                    });
+                }
             } catch (error) {
                 console.error('Error:', error);
             }
