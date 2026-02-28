@@ -24,7 +24,15 @@
             overflow-x: hidden;
             color: #fff;
             padding: 0 var(--gap-size); 
+            
+            /* --- ДОБАВЛЕНО ДЛЯ ПЕРЕХОДА --- */
+            opacity: 0;
+            transition: opacity 0.6s ease;
         }
+
+        /* Классы состояния страницы */
+        body.loaded { opacity: 1; }
+        body.fade-out { opacity: 0; }
 
         body::-webkit-scrollbar { display: none; }
 
@@ -87,22 +95,8 @@
         }
         .card:hover .card-overlay { opacity: 1; }
         
-        /* Тексты на карточках */
-        .text-container {
-            max-width: 85%; /* Компактность по ширине */
-        }
-        .project-title { 
-            font-size: 16px; /* Крупнее */
-            font-weight: 500; 
-            margin-bottom: 4px; 
-            color: #fff; 
-            line-height: 1.2;
-        }
-        .project-category { 
-            font-size: 12px; 
-            font-weight: 300; 
-            color: rgba(255,255,255,0.8); 
-        }
+        .project-title { font-size: 16px; font-weight: 500; margin-bottom: 4px; color: #fff; line-height: 1.2; }
+        .project-category { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.8); }
 
         /* --- НИЖНИЙ ВИДЖЕТ --- */
         .bottom-widget {
@@ -145,9 +139,7 @@
             .profile-card:hover { width: 320px; }
             .bottom-widget { left: 15px; bottom: 15px; }
         }
-    </style>
-</head>
-<body>
+    </style></head><body>
 
     <div class="edge-overlay edge-top"></div>
     <div class="edge-overlay edge-bottom"></div>
@@ -162,10 +154,9 @@
                 </div>
             </div>
             <nav class="nav-links">
-                <a href="#">Обо мне</a>
-                <a href="#">Проекты</a>
-                <a href="#">Презентация</a>
-                <a href="#">Контакты</a>
+                <a href="about.html" class="transition-link">Обо мне / Контакты</a>
+                <a href="index.html" class="transition-link">Проекты</a>
+                <a href="https://drive.google.com/file/d/1ENe9GrsC6ZGro17ZuocGdyjGRxdFWEGL/view?usp=drive_link" target="_blank">Презентация</a>
             </nav>
         </header>
     </div>
@@ -178,14 +169,14 @@
                 <img src="ABV.jpg" alt="Борис Арчегов" class="avatar">
                 <span class="profile-name">Борис Арчегов</span>
             </div>
-            <p class="profile-bio">I create clean, timeless photography and video that tell stories through light and motion.</p>
+            <p class="profile-bio">Привет. Я графический дизайнер с большим опытом работы в области брендинга и диджитал.</p>
         </div>
         
-        <a href="mailto:boris@example.com" class="glass-panel contact-btn">
+        <a href="mailto:b.archegov@gmail.com" class="glass-panel contact-btn">
             <svg viewBox="0 0 24 24"><path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,18H4V8l8,5l8-5V18z M12,11L4,6h16L12,11z"/></svg>
         </a>
 
-        <a href="https://t.me/yourusername" target="_blank" class="glass-panel contact-btn">
+        <a href="https://t.me/Boris_Archegov" target="_blank" class="glass-panel contact-btn">
             <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
         </a>
     </div>
@@ -193,6 +184,23 @@
     <script>
         const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThPj1nz9v2i0_OKxOzsJhhQ92-KhNHCUUp-bNL6_BQs02Ggt_UgNOa1RRWmxwxBBWC4347WpEzrR65/pub?output=csv';
         const grid = document.getElementById('infinite-grid');
+
+        /* --- ДОБАВЛЕНО ДЛЯ ПЛАВНОГО ПЕРЕХОДА --- */
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('loaded');
+        });
+
+        document.querySelectorAll('.transition-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetUrl = this.href;
+                document.body.classList.add('fade-out');
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 500); 
+            });
+        });
+        /* -------------------------------------- */
 
         function parseCSV(text) {
             const lines = text.split('\n');
@@ -224,11 +232,7 @@
             overlay.className = 'card-overlay';
             overlay.innerHTML = `
                 <div class="text-container">
-                    <div class="project-title">${data.title || ''}</div>
-                    <div class="project-category">${data.category || ''}</div>
-                </div>
-            `;
-            
+                    <div class="project-title">${data.title || ''}</div>                    <div class="project-category">${data.category || ''}</div>                </div>`;            
             link.appendChild(img);
             link.appendChild(overlay);
             card.appendChild(link);
@@ -250,6 +254,4 @@
             } catch (e) { console.error(e); }
         }
         initPortfolio();
-    </script>
-</body>
-</html>
+    </script></body></html>

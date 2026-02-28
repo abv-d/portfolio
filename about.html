@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Борис Арчегов | About</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
+
+        :root {
+            --bg-black: #000000;
+            --menu-bg: rgba(0, 0, 0, 0.7); 
+            --item-bg: rgba(255, 255, 255, 0.05);
+            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            --ui-radius: 5px; 
+            --main-radius: 8px; 
+            --gap-size: 10px; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* ДОБАВЛЕНО: Стили для анимации перехода */
+        body { 
+            background-color: var(--bg-black); 
+            font-family: 'Onest', sans-serif;
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            padding: var(--gap-size);
+            gap: var(--gap-size);
+            
+            /* Эффект появления при загрузке */
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        body.loaded { opacity: 1; }
+        body.fade-out { opacity: 0; }
+
+        /* --- ЛЕВАЯ ЧАСТЬ: ФОТО --- */
+        .photo-container {
+            flex: 2;
+            height: 100%;
+        }
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--main-radius);
+            display: block;
+        }
+
+        /* --- ПРАВАЯ ЧАСТЬ: КОНТЕНТ --- */
+        .content-container {
+            flex: 1;
+            display: flex;
+            z-index: 10;
+        }
+
+        .info-card {
+            background: var(--menu-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--main-radius);
+            padding: 40px;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .bio-top h1 {
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .bio-top p {
+            font-size: 15px;
+            line-height: 1.6;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .links-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .link-item {
+            background: var(--item-bg);
+            padding: 14px 20px;
+            border-radius: var(--ui-radius);
+            text-decoration: none;
+            color: #fff;
+            font-size: 14px;
+            transition: 0.3s ease;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .link-item svg {
+            width: 18px;
+            height: 18px;
+            fill: #fff;
+            flex-shrink: 0;
+            opacity: 0.9;
+        }
+
+        .link-label { 
+            margin-left: auto;
+            opacity: 0.4; 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em; 
+        }
+
+        /* --- ВЕРХНЕЕ МЕНЮ --- */
+        .menu-wrapper {
+            position: fixed; top: 25px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 300px;
+        }
+        .floating-nav {
+            background: var(--menu-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: var(--ui-radius); padding: 0 8px; transition: var(--transition);
+            height: 64px; border: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; max-height: 64px;
+        }
+        .floating-nav:hover { max-height: 450px; height: auto; padding-bottom: 12px; }
+        .nav-header { display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 12px; }
+        .logo { font-size: 14px; font-weight: 500; text-align: left; flex-grow: 1; letter-spacing: -0.02em; }
+        
+        .nav-links { display: flex; flex-direction: column; gap: 6px; opacity: 0; transition: 0.3s; padding-top: 4px; }
+        .floating-nav:hover .nav-links { opacity: 1; }
+        .nav-links a { 
+            text-decoration: none; color: #fff; font-size: 13px; font-weight: 400;
+            background: var(--item-bg); padding: 14px 16px; border-radius: var(--ui-radius); transition: 0.3s;
+        }
+        .nav-links a:hover { background: rgba(255, 255, 255, 0.12); }
+        
+        .burger-box { width: 32px; height: 32px; background: rgba(255,255,255,0.05); border-radius: var(--ui-radius); display: flex; justify-content: center; align-items: center; position: relative; }
+        .line { height: 1.2px; background: #fff; width: 14px; position: absolute; transition: var(--transition); }
+        .line-1 { transform: translateY(-3.5px); }
+        .line-2 { transform: translateY(3.5px); }
+        .floating-nav:hover .line-1 { transform: rotate(45deg); }
+        .floating-nav:hover .line-2 { transform: rotate(-45deg); }
+
+        /* --- НИЖНИЙ ВИДЖЕТ --- */
+        .bottom-widget {
+            position: fixed; bottom: 30px; left: 30px; z-index: 1000; display: flex; align-items: flex-end; gap: 12px;
+        }
+        .glass-panel {
+            background: var(--menu-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: var(--ui-radius); border: 1px solid rgba(255,255,255,0.05);
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1), padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .profile-card { 
+            padding: 10px; width: 220px; display: flex; flex-direction: column; 
+            overflow: hidden; cursor: pointer; transition-delay: 0.3s;
+        }
+        .profile-card:hover { width: 420px; padding: 20px; transition-delay: 0s; }
+
+        .profile-top { display: flex; align-items: center; width: 100%; height: 48px; flex-shrink: 0; }
+        .avatar { width: 48px; height: 48px; border-radius: var(--ui-radius); object-fit: cover; flex-shrink: 0; }
+        .profile-name { margin-left: 16px; font-size: 15px; font-weight: 500; white-space: nowrap; color: #fff; letter-spacing: -0.01em; }
+
+        .profile-bio {
+            font-size: 14px; opacity: 0; max-height: 0; margin-top: 0; color: rgba(255, 255, 255, 0.7); 
+            line-height: 1.5; pointer-events: none; font-weight: 300;
+            transition: opacity 0.3s ease 0s, max-height 0.3s ease 0s, margin-top 0.3s ease 0s;
+        }
+        .profile-card:hover .profile-bio { 
+            opacity: 1; max-height: 200px; margin-top: 20px; pointer-events: auto;
+            transition: opacity 0.4s ease 0.3s, max-height 0.4s ease 0.3s, margin-top 0.4s ease 0.3s;
+        }
+
+        .contact-btn { width: 72px; height: 72px; display: flex; justify-content: center; align-items: center; text-decoration: none; }
+        .contact-btn:hover { background: rgba(255, 255, 255, 0.12); }
+        .contact-btn svg { width: 22px; height: 22px; fill: #fff; transition: transform 0.3s ease; }
+        .contact-btn:hover svg { transform: scale(1.1); }
+
+        @media (max-width: 1024px) {
+            body { overflow-y: auto; height: auto; flex-direction: column; }
+            .photo-container { height: 50vh; flex: none; }
+            .info-card { padding: 30px; gap: 40px; }
+            .profile-card:hover { width: 320px; }
+            .bottom-widget { left: 15px; bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-wrapper">
+        <header class="floating-nav">
+            <div class="nav-header">
+                <div class="logo">Борис Арчегов</div>
+                <div class="burger-box">
+                    <div class="line line-1"></div>
+                    <div class="line line-2"></div>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="about.html" class="transition-link">Обо мне / Контакты</a>
+                <a href="index.html" class="transition-link">Проекты</a>
+                <a href="https://drive.google.com/file/d/1ENe9GrsC6ZGro17ZuocGdyjGRxdFWEGL/view?usp=drive_link" target="_blank">Презентация</a>
+            </nav>
+        </header>
+    </div>
+
+    <div class="photo-container">
+        <img src="face.jpg" alt="Борис Арчегов">
+    </div>
+
+    <div class="content-container">
+        <div class="info-card">
+            <div class="bio-top">
+                <h1>Борис Арчегов.</h1>
+                <p>
+                    Привет. Я графический дизайнер с большим опытом работы в области брендинга и диджитал. 
+                    В работе стремлюсь создавать нестандартные, но рабочие решения, которые помогают брендам расти.
+                </p>
+            </div>
+
+            <div class="links-bottom">
+                <a href="https://www.behance.net/abv" target="_blank" class="link-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 13h-5c0 1.25.78 2 2.5 2 1.22 0 2.22-.53 2.22-.53l.28 1.53c-.3.21-1.63.81-3.66.81-2.91 0-4.34-1.91-4.34-4.41 0-2.38 1.44-4.41 3.91-4.41 2.38 0 3.75 1.84 3.75 4.03l.34.98zm-2.06-1.38c-.06-.88-.56-1.53-1.63-1.53-1.06 0-1.63.66-1.81 1.53h3.44zm-1.44-2.81h-3V7h3v1.81zM8.34 16H3V7h5.13c2.09 0 3.53.94 3.53 2.53 0 1.09-.63 1.94-1.78 2.28 1.34.22 2.19 1.16 2.19 2.53C12.16 14.88 10.72 16 8.34 16zm-3.34-7.22v2.22h2.94c.78 0 1.38-.28 1.38-1.13 0-.78-.56-1.09-1.34-1.09H5zm0 3.88v2.53h3.31c.88 0 1.5-.34 1.5-1.28 0-.91-.63-1.25-1.5-1.25H5z"/></svg>
+                    <span>Behance</span>
+                    <span class="link-label">Портфолио</span>
+                </a>
+
+                <a href="https://dprofile.ru/abv" target="_blank" class="link-item">
+                    <svg viewBox="0 0 40 40"><path d="M28.327 3.45l8.224 8.223c4.599 4.599 4.599 12.055 0 16.654l-8.224 8.224c-4.599 4.599-12.055 4.599-16.654 0l-8.224-8.224c-4.599-4.599-4.599-12.055 0-16.654l8.224-8.224c4.599-4.599 12.055-4.599 16.654 0zM5.5 24.792v-9.586C5.5 9.846 9.846 5.5 15.207 5.5h9.586c5.361 0 9.707 4.346 9.707 9.707v9.586c0 5.361-4.346 9.707-9.707 9.707h-9.586c-5.361 0-9.707-4.346-9.707-9.707z"/></svg>
+                    <span>DPROfile</span>
+                    <span class="link-label">Портфолио</span>
+                </a>
+
+                <a href="https://ru.pinterest.com/boris_archegov" target="_blank" class="link-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.27 2.71 7.9 6.51 9.32-.1-.81-.18-2.04.04-2.92.19-.8 1.24-5.22 1.24-5.22s-.32-.63-.32-1.56c0-1.46.85-2.55 1.9-2.55.9 0 1.33.67 1.33 1.48 0 .9-.57 2.26-.87 3.51-.25 1.05.52 1.9 1.55 1.9 1.87 0 3.3-1.97 3.3-4.81 0-2.52-1.81-4.27-4.39-4.27-2.99 0-4.74 2.24-4.74 4.56 0 .9.35 1.88.78 2.4.09.1.1.19.07.29-.08.33-.25 1.03-.29 1.17-.05.21-.17.26-.39.16-1.45-.67-2.35-2.79-2.35-4.49 0-3.65 2.65-7 7.64-7 4.01 0 7.13 2.86 7.13 6.68 0 3.98-2.51 7.19-5.99 7.19-1.17 0-2.27-.61-2.65-1.33l-.72 2.74c-.26 1-1.02 2.23-1.52 3.05C10.51 21.84 11.24 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                    <span>Pinterest</span>
+                    <span class="link-label">Коллекция</span>
+                </a>
+
+                <a href="mailto:b.archegov@gmail.com" class="link-item">
+                    <svg viewBox="0 0 24 24"><path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,18H4V8l8,5l8-5V18z M12,11L4,6h16L12,11z"/></svg>
+                    <span>b.archegov@gmail.com</span>
+                    <span class="link-label">Напишите мне</span>
+                </a>
+
+                <a href="https://t.me/Boris_Archegov" target="_blank" class="link-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                    <span>@Boris_Archegov</span>
+                    <span class="link-label">На связи</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-widget">
+        <div class="glass-panel profile-card">
+            <div class="profile-top">
+                <img src="ABV.jpg" alt="Борис Арчегов" class="avatar">
+                <span class="profile-name">Борис Арчегов</span>
+            </div>
+            <p class="profile-bio">Привет. Я графический дизайнер с большим опытом работы в области брендинга и диджитал.</p>
+        </div>
+        
+        <a href="mailto:b.archegov@gmail.com" class="glass-panel contact-btn">
+            <svg viewBox="0 0 24 24"><path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,18H4V8l8,5l8-5V18z M12,11L4,6h16L12,11z"/></svg>
+        </a>
+
+        <a href="https://t.me/Boris_Archegov" target="_blank" class="glass-panel contact-btn">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+        </a>
+    </div>
+
+    <script>
+        // При загрузке страницы добавляем класс появления
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Находим все ссылки с классом transition-link
+        document.querySelectorAll('.transition-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Предотвращаем моментальный переход
+                e.preventDefault();
+                const targetUrl = this.href;
+
+                // Добавляем класс затухания
+                document.body.classList.add('fade-out');
+
+                // Ждем 500мс (время анимации) и переходим
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 500);
+            });
+        });
+    </script>
+
+</body>
+</html>
